@@ -3,7 +3,6 @@ import type { ResultDetail } from "@/api/types";
 
 /** 获取菜单列表，用于动态菜单 */
 export const getAsyncRoutes = () => {
-  console.log("getAsyncRoutes");
   return http.request<ResultDetail>("get", "/api/system/menu", {});
 };
 
