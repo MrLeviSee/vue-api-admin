@@ -21,7 +21,7 @@ import {
   AddUser,
   DelUser,
   UpdateUser
-} from "@/api/system/memberShip";
+} from "@/api/apiCtrl/memberShip";
 import {
   ElForm,
   ElInput,
@@ -148,7 +148,7 @@ export function useUser(tableRef: Ref) {
       minWidth: 140,
       prop: "last_call",
       formatter: ({ row }) => {
-        const lastCall = row?.api_calls?.last_call;
+        const lastCall = row?.api_calls[0]?.last_call;
         return lastCall
           ? dayjs(lastCall).format("YYYY-MM-DD HH:mm:ss")
           : "无记录";
@@ -210,7 +210,12 @@ export function useUser(tableRef: Ref) {
             loading: true
           }
         );
-        UpdateUser(row.id).then(res => {
+        // 构造请求数据
+        const post_data = {
+          enable: row.enable
+        };
+
+        UpdateUser(row.id, post_data).then(res => {
           if (res.code === 200) {
             setTimeout(() => {
               switchLoadMap.value[index] = Object.assign(

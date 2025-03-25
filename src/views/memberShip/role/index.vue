@@ -6,7 +6,6 @@
  * @Description: 
 -->
 <script setup lang="ts">
-import { ref } from "vue";
 import { useRole } from "./hook";
 import { PureTableBar } from "@/components/RePureTableBar";
 
@@ -14,9 +13,7 @@ defineOptions({
   name: "memberShipRole"
 });
 
-const formRef = ref();
-const { form, loading, columns, dataList, pagination, onSearch, resetForm } =
-  useRole();
+const { loading, columns, dataList, pagination, onSearch } = useRole();
 </script>
 
 <template>

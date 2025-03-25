@@ -1,4 +1,4 @@
-import { getAllRoleList } from "@/api/system/memberShip";
+import { getAllRoleList } from "@/api/apiCtrl/memberShip";
 import type { PaginationProps } from "@pureadmin/table";
 import { reactive, ref, onMounted } from "vue";
 
@@ -26,7 +26,7 @@ export function useRole() {
       label: "序号",
       type: "index",
       index: indexMethod,
-      minWidth: 90
+      minWidth: 60
     },
     {
       label: "角色编号",
