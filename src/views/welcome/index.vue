@@ -18,10 +18,10 @@ const { isDark } = useDark();
 let curWeek = ref(1); // 0上周、1本周
 const optionsBasis: Array<OptionsType> = [
   {
-    label: "上周"
+    label: "免费"
   },
   {
-    label: "本周"
+    label: "收费"
   }
 ];
 </script>
