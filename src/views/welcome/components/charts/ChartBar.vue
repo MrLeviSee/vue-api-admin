@@ -2,24 +2,34 @@
 import { useDark, useECharts } from "@pureadmin/utils";
 import { type PropType, ref, computed, watch, nextTick } from "vue";
 
-const props = defineProps({
-  requireData: {
-    type: Array as PropType<Array<number>>,
-    default: () => []
-  },
-  questionData: {
-    type: Array as PropType<Array<number>>,
-    default: () => []
-  }
-});
+interface ApiStatisticsResponse {
+  free: number[];
+  paid: number[];
+  dates: string[];
+}
 
+const loading = ref(false);
+const SevenData = ref<ApiStatisticsResponse | null>(null);
 const { isDark } = useDark();
-
 const theme = computed(() => (isDark.value ? "dark" : "light"));
-
 const chartRef = ref();
 const { setOptions } = useECharts(chartRef, {
   theme
+});
+
+const props = defineProps({
+  FreeData: {
+    type: Array as PropType<Array<number>>,
+    default: () => []
+  },
+  PaidData: {
+    type: Array as PropType<Array<number>>,
+    default: () => []
+  },
+  Days: {
+    type: Array as PropType<Array<string>>,
+    default: () => []
+  }
 });
 
 watch(
@@ -41,7 +51,7 @@ watch(
         right: 0
       },
       legend: {
-        data: ["需求人数", "提问数量"],
+        data: ["免费", "付费"],
         textStyle: {
           color: "#606266",
           fontSize: "0.875rem"
@@ -51,7 +61,7 @@ watch(
       xAxis: [
         {
           type: "category",
-          data: ["周一", "周二", "周三", "周四", "周五", "周六", "周日"],
+          data: props.Days,
           axisLabel: {
             fontSize: "0.875rem"
           },
@@ -74,24 +84,24 @@ watch(
       ],
       series: [
         {
-          name: "需求人数",
+          name: "免费",
           type: "bar",
           barWidth: 10,
           itemStyle: {
             color: "#41b6ff",
             borderRadius: [10, 10, 0, 0]
           },
-          data: props.requireData
+          data: props.FreeData
         },
         {
-          name: "提问数量",
+          name: "付费",
           type: "bar",
           barWidth: 10,
           itemStyle: {
             color: "#e86033ce",
             borderRadius: [10, 10, 0, 0]
           },
-          data: props.questionData
+          data: props.PaidData
         }
       ]
     });

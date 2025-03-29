@@ -1,9 +1,32 @@
 <script setup lang="ts">
 import { useColumns } from "./columns";
 import { useRenderIcon } from "@/components/ReIcon/src/hooks";
+import { ref, onMounted } from "vue";
+import { getApiStatisticsTops } from "@/api/apiCtrl/ApiManagement";
+
+// 在组件挂载时获取数据
+onMounted(async () => {
+  await onSearch();
+});
+
+const TopApiList = ref([]);
+
+async function onSearch() {
+  loading.value = true;
+  try {
+    const { data } = await getApiStatisticsTops();
+    TopApiList.value = data;
+  } catch (error) {
+    console.error("Failed to fetch API statistics:", error);
+  } finally {
+    setTimeout(() => {
+      loading.value = false;
+    }, 500);
+  }
+}
 
 const { loading, columns, dataList, pagination, Empty, onCurrentChange } =
-  useColumns();
+  useColumns(TopApiList);
 </script>
 
 <template>

@@ -147,7 +147,7 @@ export function useUser(tableRef: Ref) {
       label: "最近调用",
       minWidth: 140,
       prop: "last_call",
-      formatter: ({ row }) => {
+      cellRenderer: ({ row }) => {
         const lastCall = row?.api_calls[0]?.last_call;
         return lastCall
           ? dayjs(lastCall).format("YYYY-MM-DD HH:mm:ss")
@@ -295,7 +295,6 @@ export function useUser(tableRef: Ref) {
     row?: FormItemProps
   ) {
     try {
-      console.log(curData);
       const res =
         title === "新增"
           ? await AddUser(curData)
@@ -473,7 +472,6 @@ export function useUser(tableRef: Ref) {
     // 角色列表
     const roleList = (await getAllRoleList()).data;
     roleOptions.value = roleList.results;
-    console.log(roleList);
   });
 
   return {

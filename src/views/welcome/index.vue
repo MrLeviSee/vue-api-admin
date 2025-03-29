@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, markRaw } from "vue";
+import { ref, markRaw, onMounted } from "vue";
 import ReCol from "@/components/ReCol";
 import { useDark, randomGradient } from "./utils";
 import WelcomeTable from "./components/table/index.vue";
@@ -7,23 +7,42 @@ import { ReNormalCountTo } from "@/components/ReCountTo";
 import { useRenderFlicker } from "@/components/ReFlicker";
 import { ChartBar, ChartLine, ChartRound } from "./components/charts";
 import Segmented, { type OptionsType } from "@/components/ReSegmented";
-import { chartData, barChartData, progressData, latestNewsData } from "./data";
+import { useApiData, progressData, latestNewsData } from "./data";
+import { getApiLastSevenData } from "@/api/apiCtrl/ApiManagement";
 
 defineOptions({
   name: "Welcome"
 });
 
 const { isDark } = useDark();
+const { chartData, onSearch } = useApiData();
 
-let curWeek = ref(1); // 0上周、1本周
-const optionsBasis: Array<OptionsType> = [
-  {
-    label: "免费"
-  },
-  {
-    label: "收费"
+const barChartData = ref({
+  FreeData: [],
+  PaidData: [],
+  Days: []
+});
+const curWeek = ref(1);
+const optionsBasis: Array<OptionsType> = [{ label: "免费" }, { label: "付费" }];
+
+// 在组件挂载时获取数据
+onMounted(async () => {
+  await onSearch();
+  await fetchBarChartData();
+});
+
+async function fetchBarChartData() {
+  try {
+    const { data } = await getApiLastSevenData();
+    barChartData.value = {
+      FreeData: data.free,
+      PaidData: data.paid,
+      Days: data.dates
+    };
+  } catch (error) {
+    console.error("Failed to fetch bar chart data:", error);
   }
-];
+}
 </script>
 
 <template>
@@ -113,8 +132,9 @@ const optionsBasis: Array<OptionsType> = [
           </div>
           <div class="flex justify-between items-start mt-3">
             <ChartBar
-              :requireData="barChartData[curWeek].requireData"
-              :questionData="barChartData[curWeek].questionData"
+              :FreeData="barChartData.FreeData"
+              :PaidData="barChartData.PaidData"
+              :Days="barChartData.Days"
             />
           </div>
         </el-card>

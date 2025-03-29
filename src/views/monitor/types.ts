@@ -3,6 +3,7 @@
 interface FormItemProps {
   id?: number;
   module?: string;
+  summary?: string;
   operation?: number;
   uid?: string;
   username?: string;

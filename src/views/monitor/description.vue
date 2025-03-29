@@ -72,7 +72,9 @@ const getEtagType = operation => {
       {{ props.id || "-" }}
     </el-descriptions-item>
     <el-descriptions-item label="请求模块:" :width="'25%'">
-      {{ props.module || "-" }}
+      <el-text style="color: rgb(103, 194, 58)">
+        {{ props.module || props.summary || "-" }}
+      </el-text>
     </el-descriptions-item>
     <el-descriptions-item label="操作类型:">
       <el-tag

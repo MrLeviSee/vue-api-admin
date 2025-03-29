@@ -13,10 +13,10 @@ const { clipboardValue, copied } = useCopyToClipboard();
 const { isMobile } = useBasicLayout();
 export function useRole(tableRef: Ref) {
   const form = reactive({
-    uid: "",
+    username: "",
     status: "",
-    operation: "",
-    module: "",
+    token: "",
+    summary: "",
     currentPage: 1,
     pageSize: 10
   });
@@ -50,7 +50,7 @@ export function useRole(tableRef: Ref) {
       label: "序号",
       type: "index",
       index: indexMethod,
-      minWidth: 50
+      minWidth: 40
     },
     {
       label: "编号",
@@ -84,21 +84,23 @@ export function useRole(tableRef: Ref) {
     {
       label: "请求方式",
       prop: "method",
-      minWidth: 100,
+      minWidth: 80,
+      cellRenderer: ({ row, props }) => (
+        <el-tag
+          size={props.size}
+          type={row.method == "POST" ? "warning" : "danger"}
+          effect="dark"
+        >
+          {row.method}
+        </el-tag>
+      )
+    },
+    {
+      label: "API名称",
+      prop: "summary",
+      minWidth: 80,
       cellRenderer: ({ row }) => {
-        let color = "";
-        let method = "";
-        method = row.method;
-        if (method == "GET") {
-          color = "green";
-        } else if (method == "POST") {
-          color = "#e6a23c";
-        } else if (method == "PUT") {
-          color = "blue";
-        } else {
-          color = "red";
-        }
-        return <span style={{ color: color }}>{method}</span>;
+        return <span style={{ color: "red" }}>{row.summary}</span>;
       }
     },
     {
@@ -109,14 +111,14 @@ export function useRole(tableRef: Ref) {
     {
       label: "状态",
       prop: "status",
-      minWidth: 100,
+      minWidth: 60,
       cellRenderer: ({ row, props }) => (
         <el-tag
           size={props.size}
           type={row.status === 200 ? "success" : "danger"}
           effect="dark"
         >
-          {row.status === 0 ? "成功" : row.status}
+          {row.status === 200 ? "成功" : row.status}
         </el-tag>
       )
     },

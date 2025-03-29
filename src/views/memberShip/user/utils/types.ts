@@ -7,7 +7,7 @@ interface FormItemProps {
   token?: string;
   points?: number;
 
-  email: string | number;
+  email: string;
   enable: boolean;
 }
 interface FormProps {
