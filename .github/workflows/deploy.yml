@@ -7,7 +7,11 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    
+    permissions:  # 关键授权配置
+      contents: write  # 允许写入仓库
+      pages: write     # 如果需要部署到 GitHub Pages
+      id-token: write  # 如果需要 OIDC 认证
+ 
     steps:
       - uses: actions/checkout@v4
     
@@ -28,10 +32,10 @@ jobs:
       - name: Build
         run: pnpm build
 
-      - name: Deploy to GitHub Pages
+      - name: Deploy to gh-pages
         uses: peaceiris/actions-gh-pages@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
-          # 如果使用 Vue Router 的 history 模式，需要添加 404.html
+          github_token: ${{ secrets.GITHUB_TOKEN }}  # 自动注入的 token
+          publish_dir: ./dist  # 替换为你的构建输出目录
+
           enable_jekyll: false
